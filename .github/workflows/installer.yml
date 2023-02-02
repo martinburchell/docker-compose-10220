@@ -5,14 +5,10 @@ name: Docker Compose latest
 on:
     push:
         paths:
-            - 'crate_anon/**'
             - .github/workflows/installer.yml
             - github_action_scripts/installer_setup.sh
-            - github_action_scripts/post_installation_checks.sh
-            - github_action_scripts/set_crate_docker_environment
             - 'docker/**'
             - 'installer/**'
-            - setup.py
 jobs:
     installer:
         runs-on: ubuntu-20.04
@@ -25,7 +21,6 @@ jobs:
                 mkdir -p ${DOCKER_CONFIG}/cli-plugins
                 docker version
                 docker compose version
-                source ${GITHUB_WORKSPACE}/github_action_scripts/set_crate_docker_environment
-                ${GITHUB_WORKSPACE}/github_action_scripts/installer_setup.sh
+                export CRATE_DOCKER_INSTALL_USER_ID=$(id -u)
                 cd ${GITHUB_WORKSPACE}/installer
                 ./installer.sh -d
