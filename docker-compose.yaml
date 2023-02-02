@@ -16,5 +16,3 @@ services:
             dockerfile: Dockerfile
 
         image: crate
-
-        restart: "always"
