@@ -1,26 +1,98 @@
 ---
 # yamllint disable rule:line-length
 # yamllint disable rule:comments-indentation
+# server/docker/dockerfiles/docker-compose.yaml
+#
+# See the help!
+# https://crateanon.readthedocs.io/en/latest/installation/docker.html
+
+# =============================================================================
+# Environment variables used (see help)
+# =============================================================================
+#
+# Those with defaults in the .env file in this directory:
+#
+#   COMPOSE_PROJECT_NAME -- used by Docker Compose itself
+#   CRATE_DOCKER_CRATE_ANON_CONFIG
+#   CRATE_DOCKER_CRATEWEB_CONFIG_FILENAME
+#   CRATE_DOCKER_CRATEWEB_HOST_PORT
+#   CRATE_DOCKER_CRATEWEB_SSL_CERTIFICATE
+#   CRATE_DOCKER_CRATEWEB_SSL_PRIVATE_KEY
+#   CRATE_DOCKER_FLOWER_HOST_PORT
+#   CRATE_DOCKER_MYSQL_CRATE_DATABASE_NAME
+#   CRATE_DOCKER_MYSQL_CRATE_HOST_PORT
+#   CRATE_DOCKER_MYSQL_CRATE_USER_NAME
+#
+# Those without defaults:
+#
+#   CRATE_DOCKER_CONFIG_HOST_DIR
+#   CRATE_DOCKER_GATE_BIOYODIE_RESOURCES_HOST_DIR
+#   CRATE_DOCKER_MYSQL_CRATE_USER_PASSWORD
+#   CRATE_DOCKER_MYSQL_CRATE_ROOT_PASSWORD
+
+
+# =============================================================================
+# docker-compose file syntax version
+# =============================================================================
 
 version: "3.5"
 
+
+# =============================================================================
+# Containers (services)
+# =============================================================================
+
 services:
-    server:
+
+    # -------------------------------------------------------------------------
+    # CRATE image, with build commands (to create from the Dockerfile),
+    # running the workers.
+    # -------------------------------------------------------------------------
+
+    crate_workers:
         # Build a container from a Dockerfile.
         build:
             # Context for Docker to build the image (relative to this file).
-            context: ./
+            context: ../../
 
             # Filename of the Dockerfile to use, relative to the context.
-            dockerfile: Dockerfile
+            dockerfile: docker/dockerfiles/crate.Dockerfile
 
             args:
-                - USER_ID=${INSTALL_USER_ID}
+                - USER_ID=${CRATE_DOCKER_INSTALL_USER_ID}
 
         # If you specify "image" as well as "build", Compose names the built
         # image. Syntax is "IMAGE[:TAG]".
-        image: test
-        container_name: test_server
+        image: crate
+        container_name: crate_crate_workers
 
         # Restart policy
         restart: "always"
+
+        environment:
+            CRATE_ANON_CONFIG: "/crate/cfg/${CRATE_DOCKER_CRATE_ANON_CONFIG}"
+            CRATE_GATE_PLUGIN_FILE: "/crate/src/crate_anon/nlp_manager/specimen_gate_plugin_file.ini"
+            CRATE_PACKAGE_ROOT: "/crate/venv/lib/python3.7/site-packages/crate_anon"
+            CRATE_WEB_LOCAL_SETTINGS: "/crate/cfg/${CRATE_DOCKER_CRATEWEB_CONFIG_FILENAME}"
+            CRATE_WEB_STATIC_ROOT: "/crate/static"
+            GATE_HOME: "/crate/gate"
+            KCL_LEWY_BODY_DIAGNOSIS_DIR: "/crate/kcl_lewy_body_dementia"
+            KCL_PHARMACOTHERAPY_DIR: "/crate/kcl_pharmacotherapy/brc-gate-pharmacotherapy"
+            KCL_KCONNECT_DIR: "/crate/bioyodie"
+            DJANGO_SUPERUSER_USERNAME: "${CRATE_DOCKER_CRATEWEB_SUPERUSER_USERNAME}"
+            DJANGO_SUPERUSER_PASSWORD: "${CRATE_DOCKER_CRATEWEB_SUPERUSER_PASSWORD}"
+            DJANGO_SUPERUSER_EMAIL: "${CRATE_DOCKER_CRATEWEB_SUPERUSER_EMAIL}"
+
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        networks:
+            - crateanon_network
+
+
+# =============================================================================
+# Networks
+# =============================================================================
+
+networks:
+    crateanon_network:
+        driver: bridge
