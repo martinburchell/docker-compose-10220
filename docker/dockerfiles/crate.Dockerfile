@@ -9,12 +9,7 @@ ADD . /crate/src
 WORKDIR /crate
 
 
-RUN echo "===============================================================================" \
-    && echo "CRATE" \
-    && echo "===============================================================================" \
-    && echo "- Creating Python 3 virtual environment..." \
-    && python3 -m venv /crate/venv \
-    && echo "- Done."
+RUN mkdir -p /crate/venv/foo
 
 
 USER crate
