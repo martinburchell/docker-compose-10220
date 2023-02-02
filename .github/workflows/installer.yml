@@ -20,6 +20,5 @@ jobs:
                 mkdir -p ${DOCKER_CONFIG}/cli-plugins
                 docker version
                 docker compose version
-                export CRATE_DOCKER_INSTALL_USER_ID=$(id -u)
                 cd ${GITHUB_WORKSPACE}/installer
                 ./installer.sh -d
