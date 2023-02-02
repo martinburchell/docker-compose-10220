@@ -9,13 +9,12 @@ version: "3.5"
 
 services:
 
-    crate_workers:
+    test:
         build:
             context: ./
 
             dockerfile: Dockerfile
 
         image: crate
-        container_name: crate_crate_workers
 
         restart: "always"
