@@ -1,3 +1,8 @@
 FROM python:3.8-slim-buster
 
-RUN mkdir -p /test/foo
+ADD . /test/src
+
+WORKDIR /test
+
+
+RUN mkdir -p /test/foo/bar
