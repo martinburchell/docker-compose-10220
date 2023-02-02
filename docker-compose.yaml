@@ -15,6 +15,6 @@ services:
 
             dockerfile: Dockerfile
 
-        image: test
+        image: test_image
 
         restart: "always"
