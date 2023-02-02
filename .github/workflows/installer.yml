@@ -2,12 +2,8 @@
 # yamllint disable rule:line-length
 name: Docker Compose latest
 # yamllint disable-line rule:truthy
-on:
-    push:
-        paths:
-            - .github/workflows/installer.yml
-            - 'docker/**'
-            - 'installer/**'
+on push
+
 jobs:
     installer:
         runs-on: ubuntu-20.04
@@ -20,5 +16,5 @@ jobs:
                 mkdir -p ${DOCKER_CONFIG}/cli-plugins
                 docker version
                 docker compose version
-                cd ${GITHUB_WORKSPACE}/installer
-                ./installer.sh -d
+                cd ${GITHUB_WORKSPACE}
+                ./installer.sh
