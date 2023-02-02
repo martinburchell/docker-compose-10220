@@ -1,21 +1,51 @@
 ---
 # yamllint disable rule:line-length
 # yamllint disable rule:comments-indentation
+# server/docker/dockerfiles/docker-compose.yaml
+#
+# See the help!
+# https://crateanon.readthedocs.io/en/latest/installation/docker.html
 
+# =============================================================================
+# Environment variables used (see help)
+# =============================================================================
+#
+# Those with defaults in the .env file in this directory:
+#
+#   COMPOSE_PROJECT_NAME -- used by Docker Compose itself
+
+
+# =============================================================================
+# docker-compose file syntax version
+# =============================================================================
 
 version: "3.5"
 
 
+# =============================================================================
+# Containers (services)
+# =============================================================================
+
 services:
 
-    test:
+    # -------------------------------------------------------------------------
+    # CRATE image, with build commands (to create from the Dockerfile),
+    # running the workers.
+    # -------------------------------------------------------------------------
+
+    crate_workers:
+        # Build a container from a Dockerfile.
         build:
+            # Context for Docker to build the image (relative to this file).
             context: ./
 
             # Filename of the Dockerfile to use, relative to the context.
             dockerfile: Dockerfile
 
-        image: test
+        # If you specify "image" as well as "build", Compose names the built
+        # image. Syntax is "IMAGE[:TAG]".
+        image: crate
+        container_name: crate_crate_workers
 
         # Restart policy
         restart: "always"
@@ -23,7 +53,7 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
         networks:
-            - test_network
+            - crateanon_network
 
 
 # =============================================================================
@@ -31,5 +61,5 @@ services:
 # =============================================================================
 
 networks:
-    test_network:
+    crateanon_network:
         driver: bridge

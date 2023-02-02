@@ -1,3 +1,8 @@
 FROM python:3.8-slim-buster
 
-RUN mkdir -p /test/foo
+ADD . /crate/src
+
+WORKDIR /crate
+
+
+RUN mkdir -p /crate/venv/foo
