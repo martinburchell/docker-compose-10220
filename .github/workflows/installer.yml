@@ -2,7 +2,7 @@
 # yamllint disable rule:line-length
 name: Docker Compose latest
 # yamllint disable-line rule:truthy
-on push
+on: push
 
 jobs:
     installer:
