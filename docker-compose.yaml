@@ -5,14 +5,9 @@
 
 version: "3.5"
 
-
-
 services:
-
     test:
         build:
             context: ./
-
-            dockerfile: Dockerfile
 
         image: crate
