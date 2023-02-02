@@ -6,7 +6,6 @@ on:
     push:
         paths:
             - .github/workflows/installer-2.14.0.yml
-            - github_action_scripts/installer_setup.sh
             - 'docker/**'
             - 'installer/**'
 jobs:
